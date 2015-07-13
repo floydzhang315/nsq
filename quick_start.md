@@ -30,8 +30,8 @@
         $ curl -d 'hello world 2' 'http://127.0.0.1:4151/put?topic=test'
         $ curl -d 'hello world 3' 'http://127.0.0.1:4151/put?topic=test'
 
- 8. 按照预先设想的，在浏览器中打开 `http://127.0.0.1:4171/` 就能查看 `nsqadmin` 的UI界面和队列统计数据。同时，还可以在 `/tmp` 目录下检查 (`test.*.log`) 文件.
+ 8. 按照预先设想的，在浏览器中打开 `http://127.0.0.1:4171/` 就能查看 `nsqadmin` 的 UI 界面和队列统计数据。同时，还可以在 `/tmp` 目录下检查 (`test.*.log`) 文件.
 
-这个教程中最重要的是：`nsq_to_file` (客户端)没有明确地指出 testtopic 被生产，它从 `nsqlookupd` 获取信息，即使在消息推送之后才开始连接 nsqd 消息也并没有消失。(这是里指保证每一条消息至少被一个消费者消费掉)。
+这个教程中最重要的是：`nsq_to_file` (客户端)没有明确地指出 `test` 话题被生产，它从 `nsqlookupd` 获取信息，即使在消息推送之后才开始连接 nsqd，消息也并没有消失。
 
 [installing]: installing.md
