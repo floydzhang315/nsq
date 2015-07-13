@@ -4,12 +4,11 @@
 
 主仓库包含一段代码（`bench/bench.py`），它能在 EC2 上自动完成分布式基准。
 
-它引导 `N` 个节点，一些运行 `nsqd`，一些运行加载生成工具（`PUB` and
-`SUB`），并分析它们的输出来提供聚合。		
+它引导 `N` 个节点，一些运行 `nsqd`，一些运行加载生成工具（`PUB` 和 `SUB`），并分析它们的输出来提供聚合。		
 
 ## 初始化
 
-下面的代码反应了默认参数6 `c3.2xlarge`，这个实例支持 1g 比特的连接。3 个节点运行 `nsqd`  实例，剩下的运行 `bench_reader` (`SUB`) and `bench_writer` (`PUB`) 实例，来生成依赖于基准模式的负载。
+下面的代码反应了默认参数6 `c3.2xlarge`，这个实例支持 1g 比特的连接。3 个节点运行 `nsqd`  实例，剩下的运行 `bench_reader` (`SUB`) 和 `bench_writer` (`PUB`) 实例，来生成依赖于基准模式的负载。
 
     $ ./bench/bench.py --access-key=... --secret-key=... --ssh-key-name=...
     [I 140917 10:58:10 bench:102] launching 6 instances
@@ -72,18 +71,18 @@
 
 ## GOMAXPROCS=1 (单个生产者，单个消费者)
 
-{% highlight bash %}
-$ ./bench.sh 
-results...
-PUB: 2014/01/12 22:09:08 duration: 2.311925588s - 82.500mb/s - 432539.873ops/s - 2.312us/op
-SUB: 2014/01/12 22:09:19 duration: 6.009749983s - 31.738mb/s - 166396.273ops/s - 6.010us/op
-{% endhighlight %}
+	{% highlight bash %}
+	$ ./bench.sh 
+	results...
+	PUB: 2014/01/12 22:09:08 duration: 2.311925588s - 82.500mb/s - 432539.873ops/s - 2.312us/op
+	SUB: 2014/01/12 22:09:19 duration: 6.009749983s - 31.738mb/s - 166396.273ops/s - 6.010us/op
+	{% endhighlight %}
 
 ## GOMAXPROCS=4 (4 个生产者, 4 个消费者)
 
-{% highlight bash %}
-$ ./bench.sh 
-results...
-PUB: 2014/01/13 16:58:05 duration: 1.411492441s - 135.130mb/s - 708469.965ops/s - 1.411us/op
-SUB: 2014/01/13 16:58:16 duration: 5.251380583s - 36.321mb/s - 190426.114ops/s - 5.251us/op
-{% endhighlight %}
+	{% highlight bash %}
+	$ ./bench.sh 
+	results...
+	PUB: 2014/01/13 16:58:05 duration: 1.411492441s - 135.130mb/s - 708469.965ops/s - 1.411us/op
+	SUB: 2014/01/13 16:58:16 duration: 5.251380583s - 36.321mb/s - 190426.114ops/s - 5.251us/op
+	{% endhighlight %}
