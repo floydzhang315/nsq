@@ -1,10 +1,10 @@
 # nsqlookupd
 
-`nsqlookupd` 是守护进程负责管理拓扑信息。客户端通过查询  `nsqlookupd` 来发现指定话题（topic）的生产者，并且 `nsqd` 节点 广播话题（topic）和通道（channel）信息。
+`nsqlookupd` 是守护进程负责管理拓扑信息。客户端通过查询  `nsqlookupd` 来发现指定话题（topic）的生产者，并且 `nsqd` 节点广播话题（topic）和通道（channel）信息。
 
 有两个接口：TCP 接口，`nsqd` 用它来广播。HTTP 接口，客户端用它来发现和管理。
 
-### 命令行选项
+## 命令行选项
 
     -http-address="0.0.0.0:4161": <addr>:<port> 监听 HTTP 客户端
     -inactive-producer-timeout=5m0s: 从上次 ping 之后，生产者驻留在活跃列表中的时长
@@ -14,7 +14,7 @@
     -verbose=false: 允许输出日志
     -version=false: 打印版本信息
 
-### HTTP 接口
+## HTTP 接口
 
 #### /lookup
 
@@ -68,15 +68,15 @@
 
 #### /ping
 
-监控端点, 必须返回 `OK`
+监控端点，必须返回 `OK`
 
 #### /info
 
 返回版本信息
 
-### <a name="deletion_tombstones">删除和逻辑删除（Tombstones）</a>
+## 删除和逻辑删除（Tombstones）
 
-当一个话题（topic）不再全局生产，相对简单的操作是从集群里清理这个消息。假设所有的应用生产的消息下降，使用  `/delete_topic` 结束`nsqlookupd`  实例的，是必须要完成的操作。（内部来说，它将会识别 `nsqd` 生产者，并对这些节点执行合适的操作）。
+当一个话题（topic）不再全局生产，相对简单的操作是从集群里清理这个消息。假设所有的应用生产的消息下降，使用 `/delete_topic` 结束`nsqlookupd` 实例的，是必须要完成的操作。（内部来说，它将会识别 `nsqd` 生产者，并对这些节点执行合适的操作）。
 
 全局来看，通道（channel）删除进程都很类似，不同点是你需用 `/delete_channel` 结束 `nsqlookupd` 实例，并且你必须保证所有的订阅了通道（channel）得消费者已经下降（downed）。
 

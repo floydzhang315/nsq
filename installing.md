@@ -1,6 +1,6 @@
 # 安装
 
-## <a name="binary">Binary Releases</a>
+## Binary Releases
 
 为 linux 和 darwin 预编译二进制文件 (`nsqd`, `nsqlookupd`, `nsqadmin`,以及所有的例子应用)，可用来下载。
 
@@ -30,27 +30,27 @@
 
 ## 从源文件编译
 
-## Pre-requisites
+### Pre-requisites
 
  * **[golang](http://golang.org/doc/install)** (version **`1.2+`** is required)
  * **[gpm](https://github.com/pote/gpm)** (dependency manager)
 
-## 编译
+### 编译
 
 NSQ 使用 **[gpm](https://github.com/pote/gpm)** 来管理依赖文件。 **编译源文件，`gpm` 是首选方案。**
 
-{% highlight bash %}
+```
 $ gpm install
 $ go get github.com/bitly/nsq/...
-{% endhighlight %}
+```
 
 NSQ 保持了 `go get` 兼容，但是不推荐，因为之后不能保证仍然能稳定编译。
 
-## Testing
+### Testing
 
-{% highlight bash %}
+```
 $ ./test.sh
-{% endhighlight %}
+```
 
 [0.3.5_darwin_go142]: https://s3.amazonaws.com/bitly-downloads/nsq/nsq-0.3.5.darwin-amd64.go1.4.2.tar.gz
 [0.3.5_linux_go142]: https://s3.amazonaws.com/bitly-downloads/nsq/nsq-0.3.5.linux-amd64.go1.4.2.tar.gz

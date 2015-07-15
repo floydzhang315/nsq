@@ -12,11 +12,11 @@
 
 `--mem-queue-size` 调整每个话题（topic)/通道（channnel）消息队列数。超过上限的消息，将会写到持平，通过 `--data-path` 定义。
 
-同时, `nsqd` 将会需要通过 `nsqlookupd` 配置（参见以下详情），为每个实例指定参数。
+同时，`nsqd` 将会需要通过 `nsqlookupd` 配置（参见以下详情），为每个实例指定参数。
 
 拓扑结构，我们推荐运行 `nsqd` ，和生产消息服务共同写作。
 
-`nsqd` 可以配置来推送数据到 [statsd][statsd]，通过指定 `--statsd-address`。在 `nsq.*` 命令空间里，`nsqd`发送统计数据，参见 [nsqd statsd][nsqd_statsd].
+`nsqd` 可以配置来推送数据到 [statsd][statsd]，通过指定 `--statsd-address`。在 `nsq.*` 命令空间里，`nsqd`发送统计数据，参见 [nsqd statsd][nsqd_statsd]。
 
 ## nsqlookupd
 
@@ -28,11 +28,11 @@
 
 ## nsqadmin
 
-`nsqadmin` 是 web 服务，用来实时的管理你的 NSQ 集群。它通过和 `nsqlookupd` 实例交流，来确定生产者和 [graphite][graphite] 图表（要求打开 `nsqd` 端 `statsd`）。
+`nsqadmin` 是 Web 服务，用来实时的管理你的 NSQ 集群。它通过和 `nsqlookupd` 实例交流，来确定生产者和 [graphite][graphite] 图表（要求打开 `nsqd` 端 `statsd`）。
 
 我们仅需运行一个，并使它可以公开访问（安全）。
 
-仅有一些 HTML 模板需要部署。默认 `nsqadmin`，位于  `/usr/local/share/nsqadmin/templates`，可以通过 `--template-dir` 重写。
+仅有一些 HTML 模板需要部署。默认 `nsqadmin`，位于 `/usr/local/share/nsqadmin/templates`，可以通过 `--template-dir` 重写。
 
 要显示 `graphite` 图表，指定 `--graphite-url`。如果你已经使用 `statsd`，给所有的 keys 添加前缀，就需要指定 `--use-statsd-prefixes`。最后，如果 graphite 不能公开访问，通过指定`--proxy-graphite`， 你可以使用 `nsqadmin` 代理这些请求。
 

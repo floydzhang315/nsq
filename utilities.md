@@ -1,6 +1,6 @@
 # 工具
 
-These are utilities that facilitate common functionality and introspection into data streams.
+这些工具促进通用功能和内省到数据流。
 
 ## nsq_stat
 
@@ -23,7 +23,7 @@ These are utilities that facilitate common functionality and introspection into 
 
 ## nsq_tail
 
-消费指定的话题（topic）/通道（channel），并写到stdout (和 tail(1) 类似)
+消费指定的话题（topic）/通道（channel），并写到 stdout (和 tail(1) 类似)。
 
 ## 命令行参数
 
@@ -39,7 +39,7 @@ These are utilities that facilitate common functionality and introspection into 
 
 ## nsq\_to_file
 
-消费指定的话题（topic）/通道（channel），并写道文件中，有选择的滚动和/或压缩文件。
+消费指定的话题（topic）/通道（channel），并写到文件中，有选择的滚动和/或压缩文件。
 
 ## 命令行参数
 
@@ -63,10 +63,9 @@ These are utilities that facilitate common functionality and introspection into 
 
 ## nsq\_to_http
 
-Consumes the specified 话题（topic）/通道（channel） and performs HTTP requests (GET/POST) to the specified
-endpoints.
+消费指定的话题（topic）/通道（channel）和执行 HTTP requests (GET/POST) 到指定的端点。
 
-## 命令行擦拭你
+## 命令行参数
 
     -channel="nsq_to_http": nsq 通道（channel）
     -consumer-opt=: 参数，通过 nsq.Consumer (可能会给多次, http://godoc.org/github.com/bitly/go-nsq#Config)
@@ -91,7 +90,7 @@ endpoints.
 
 ## nsq\_to_nsq
 
-Consumes the specified 话题（topic）/channel and re-publishes the messages to destination `nsqd` via TCP.
+消费者指定的话题/通道和重发布消息到目的地 `nsqd` 通过 TCP。
 
 ## 命令行参数
 

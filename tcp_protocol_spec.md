@@ -4,26 +4,26 @@ NSQ 协议足够简单，用任何语言编译客户端都很容易。我们提�
 
 `nsqd` 进程通过监听配置的 TCP 端口来接受客户端连接。
 
-连接后，客户端必须发送一个 4 字节的"魔术"标识码，表示通讯协议的版本。
+连接后，客户端必须发送一个 4 字节的"magic"标识码，表示通讯协议的版本。
 
  * `V2` (4个字节的 ASCII `[space][space][V][2]`)
    消费用到的推送流协议（和发布用到的请求/响应协议）
 
 认证后，客户端可以发送 `IDENTIFY` 命令来停供常用的元数据（比如，更多的描述标识码）和协商特性。为了消费消息，客户端必须`SUB` 到一个通道（channel)。
 
-订阅的时候，客户端的 `RDY` 状态卫 0。意味着没有消息会被发送到客户端。当客户端已经准备好接受消息时，需要把 `RDY` 设置为 #。比如设置为 100，不需要任何附加命令，将会有 100 条消息推送到客户端（每次服务端都会相应的减少 `RDY` 的值）。
+订阅的时候，客户端的 `RDY` 状态为 0。意味着没有消息会被发送到客户端。当客户端已经准备好接受消息时，需要把 `RDY` 设置为 #。比如设置为 100，不需要任何附加命令，将会有 100 条消息推送到客户端（每次服务端都会相应的减少 `RDY` 的值）。
 
-V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置），`nsqd` 将会发送一个 `_heartbeat_` 响应，并期待返回。如果客户端空闲，发送 `NOP`命令。如果 2 个 `_heartbeat_` 响应没有被应答， `nsqd` 将会超时，并且强制关闭客户端连接。 `IDENTIFY`  命令可以用来改变/禁用这个行为。
+V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置），`nsqd` 将会发送一个 `_heartbeat_` 响应，并期待返回。如果客户端空闲，发送 `NOP`命令。如果 2 个 `_heartbeat_` 响应没有被应答， `nsqd` 将会超时，并且强制关闭客户端连接。`IDENTIFY` 命令可以用来改变/禁用这个行为。
 
-## <a name="注意s">节点（注意s）</a>
+## 注意
 
- * 除非 stated  ，所有的传输的二级制大小/整数都是网络字节顺序。(列如. *big* endian)
+ * 除非 stated，所有的传输的二级制大小/整数都是网络字节顺序。(列如. *big* endian)
 
  * 有效的*话题（topic)*和*通道（channel)*名必须是字符`[.a-zA-Z0-9_-]` 和数字 `1 < length <= 64` (在 `nsqd` `0.2.28` 版本前最长 `32` 位)
 
 ## 命令
 
-## <a name="identify">IDENTIFY</a>
+### IDENTIFY
 
 更新服务器上的客户端元数据和协商功能。
 
@@ -58,8 +58,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
 
      默认值 `16kb`
 
- * **`output_buffer_timeout`** (`nsqd` `v0.2.21+`) the timeout after which any data that nsqd has
-                                 buffered will be flushed to this client.
+ * **`output_buffer_timeout`** (`nsqd` `v0.2.21+`)超时后，nsqd 缓冲的数据都会刷新到此客户端。
 
      有效范围: `1ms <= output_buffer_timeout <= configured_max` (`-1` 禁用 timeouts)
 
@@ -67,11 +66,11 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
 
      默认值 `250ms`
 
-     **警告**: 使用极小值 `output_buffer_timeout` (`< 25ms`) 配置客户端，将会显著提高 `nsqd` CPU 的使用率（通常客户端连接时 `> 50` ）
+     **警告**: 使用极小值 `output_buffer_timeout` (`< 25ms`) 配置客户端，将会显著提高 `nsqd` CPU 的使用率（通常客户端连接时 `> 50` ）。
 
      这依赖于 Go 的 timers 的实现，它通过 Go 的优先队列运行时间维护。细节参见 [pull request #236][pull_req_236] 里的 [commit message][043b79ac]。
 
- * **`tls_v1`** (`nsqd` `v0.2.22+`) 允许 TLS for this connection.
+ * **`tls_v1`** (`nsqd` `v0.2.22+`) 允许 TLS 来连接
 
      `--tls-cert` and `--tls-key` (nsqd 标志位s) 允许 TLS 并配置服务器证书
 
@@ -117,14 +116,14 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
 
     OK
 
-注意: 如果客户端发送了 `feature_negotiation` (并且服务端支持)，响应体将会是 JSON 。
+注意: 如果客户端发送了 `feature_negotiation` (并且服务端支持)，响应体将会是 JSON。
 
 错误后的响应内容:
 
     E_INVALID
     E_BAD_BODY
 
-## SUB
+### SUB
 
 订阅话题（topic)/通道（channel)
 
@@ -143,7 +142,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_BAD_TOPIC
     E_BAD_CHANNEL
 
-## PUB
+### PUB
 
 发布一个消息到 **话题（topic)**:
 
@@ -163,7 +162,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_BAD_MESSAGE
     E_PUB_FAILED
 
-## MPUB
+### MPUB
 
 发布多个消息到 **话题（topic)** (自动):
 
@@ -189,7 +188,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_BAD_MESSAGE
     E_MPUB_FAILED
 
-## RDY
+### RDY
 
 更新 `RDY` 状态 (表示你已经准备好接收`N` 消息)
 
@@ -205,7 +204,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
 
     E_INVALID
 
-## FIN
+### FIN
 
 完成一个消息 (表示成功处理)
 
@@ -220,7 +219,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_INVALID
     E_FIN_FAILED
 
-## REQ
+### REQ
 
 重新将消息队列（表示处理失败）
 
@@ -241,7 +240,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_INVALID
     E_REQ_FAILED
 
-## TOUCH
+### TOUCH
 
 重置传播途中的消息超时时间
 
@@ -258,7 +257,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
     E_INVALID
     E_TOUCH_FAILED
 
-## CLS
+### CLS
 
 清除连接（不再发送消息）
 
@@ -272,7 +271,7 @@ V2 版本的协议让客户端拥有心跳功能。每隔 30 秒（默认设置�
 
     E_INVALID
 
-## NOP
+### NOP
 
 No-op
 
@@ -280,7 +279,7 @@ No-op
 
 注意: 这里没有response
 
-## AUTH
+### AUTH
 
 注意: 在 `nsqd` `v0.2.29+` 可用
 
@@ -332,4 +331,4 @@ JSON 包含授权给客户端的身份，可选的 URL，和授权过的权限�
 
 [pull_req_236]: https://github.com/bitly/nsq/pull/236
 [043b79ac]: https://github.com/mreiferson/nsq/commit/043b79acda5fe57056b3cc21b2ef536d5615a2c2]
-[nsqd_auth]: {{ site.baseurl }}/components/nsqd.html
+[nsqd_auth]: http://nsq.io/components/nsqd.html
