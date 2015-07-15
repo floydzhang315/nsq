@@ -26,7 +26,7 @@
 
     ifconfig | grep addr
 
-接着, 运行 `nsqd` 容器:
+接着，运行 `nsqd` 容器:
 
     docker pull nsqio/nsq
     docker run --name nsqd -p 4150:4150 -p 4151:4151 \
@@ -36,17 +36,16 @@
 
 设置 `--lookupd-tcp-address` 标志位到主机 IP，以及之前运行的 TCP 端口：
 
+`nsqlookupd`， i.e. `dockerIP:4160`:
 
-`nsqlookupd`, i.e. `dockerIP:4160`:
-
-例如, 指定主机IP `172.17.42.1`:
+例如，指定主机IP `172.17.42.1`:
 
     docker run --name nsqd -p 4150:4150 -p 4151:4151 \
         nsqio/nsq /nsqd \
         --broadcast-address=172.17.42.1 \
         --lookupd-tcp-address=172.17.42.1:4160
 
-注意：这里使用端口 `4160`, 端口暴露了什么我们什么开始运行 `nsqlookupd` 容器 (它也是 `nsqlookupd` 的端口)。
+注意：这里使用端口 `4160`，端口暴露了什么我们什么开始运行 `nsqlookupd` 容器 (它也是 `nsqlookupd` 的端口)。
 
 如果你不想使用默认端口，改变 `-p` 参数:
 
