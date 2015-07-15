@@ -56,7 +56,6 @@ NSQ 的设计目标之一就是要限定保持在内存中的消息数。它通�
 由于内存队列只是一个 go-chan，把消息放到内存中显得不重要，如果可能的话，则退回到磁盘：
 
 ```
-{% highlight go %}
 for msg := range c.incomingMsgChan {
 	select {
 	case c.memoryMsgChan <- msg:
@@ -67,7 +66,6 @@ for msg := range c.incomingMsgChan {
 		}
 	}
 }
-{% endhighlight %}
 ```
 
 说到 Go `select` 语句的优势在于用在短短的几行代码实现这个功能：`default` 语句只在 `memoryMsgChan` 已满的情况下执行。
@@ -244,7 +242,6 @@ NSQ 的 TCP 协议是面向 push 的。在建立连接，握手，和订阅后�
 为了减少典型样板，nsqd 使用以下装饰器：
 
 ```
-{% highlight go %}
 type WaitGroupWrapper struct {
 	sync.WaitGroup
 }
@@ -262,7 +259,6 @@ wg := WaitGroupWrapper{}
 wg.Wrap(func() { n.idPump() })
 ...
 wg.Wait()
-{% endhighlight %}
 ```
 
 #### 退出信号
@@ -270,7 +266,6 @@ wg.Wait()
 有一个简单的方式在多个 child goroutine 中触发一个事件是提供一个go-chane，当你准备好时关闭它。所有在那个 go-chan 上挂起的 go-chan 都将会被激活，而不是向每个 goroutine 中发送一个单独的信号。
 
 ```
-{% highlight go %}
 func work() {
     exitChan := make(chan int)
     go task1(exitChan)
@@ -287,7 +282,6 @@ func task2(exitChan chan int) {
     <-exitChan
     log.Printf("task2 exiting")
 }
-{% endhighlight %}
 ```
 
 #### 退出时的同步
