@@ -92,7 +92,7 @@
 
     {"status_code":200, "status_text":"OK", "data":{...}}
 
-发送 `Accept: application/vnd.nsq; version=1.0` 头将会协商使用未封装的 JSON 响应格式 (as of `nsqd` `v0.2.29+`).
+发送 `Accept: application/vnd.nsq; version=1.0` 头将会协商使用未封装的 JSON 响应格式 (as of `nsqd` `v0.2.29+`)。
 
 #### /pub
 
@@ -104,9 +104,9 @@
     
     POST body - the raw message bytes
 
-{% highlight bash %}
+```
 $ curl -d "<message>" http://127.0.0.1:4151/pub?topic=message_topic`
-{% endhighlight %}
+```
 
 #### /mpub
 
@@ -125,9 +125,9 @@ $ curl -d "<message>" http://127.0.0.1:4151/pub?topic=message_topic`
     [ 4-byte message #1 size ][ N-byte binary data ]
           ... (repeated <num_messages> times)
 
-{% highlight bash %}
+```
 $ curl -d "<message>\n<message>\n<message>" http://127.0.0.1:4151/mpub?topic=message_topic`
-{% endhighlight %}
+```
 
 #### /topic/create
 
@@ -175,7 +175,7 @@ $ curl -d "<message>\n<message>\n<message>" http://127.0.0.1:4151/mpub?topic=mes
 
 **已抛弃的别名:** `/empty_topic`
 
-清空现有话题（topic)队列中所有的消息（内存和磁盘中）
+清空现有话题（topic) 队列中所有的消息（内存和磁盘中）
 
 参数:
 
@@ -185,7 +185,7 @@ $ curl -d "<message>\n<message>\n<message>" http://127.0.0.1:4151/mpub?topic=mes
 
 **已抛弃的别名:** `/empty_channel`
 
-清空现有通道（channel)队列中所有的消息（内存和磁盘中）
+清空现有通道（channel) 队列中所有的消息（内存和磁盘中）
 
 参数:
 
@@ -277,18 +277,17 @@ $ curl -d "<message>\n<message>\n<message>" http://127.0.0.1:4151/mpub?topic=mes
 
 返回 goroutine 栈记录
 
-### <a name="pprof">Debugging and Profiling</a>
+### Debugging and Profiling
 
-`nsqd` 提供一套节点的配置信息， 直接通过 Go 的 [pprof][go_pprof] 工具。如果你有 go 工具套装，只要运行：
+`nsqd` 提供一套节点的配置信息，直接通过 Go 的 [pprof][go_pprof] 工具。如果你有 go 工具套装，只要运行：
 
-{% highlight bash %}
+```
 # memory profiling
 $ go 工具 pprof http://localhost:4151/debug/pprof/heap
 
 # cpu profiling
 $ go 工具 pprof http://localhost:4151/debug/pprof/profile
-{% endhighlight %}
-
+```
 ### TLS
 
 为了加强安全性，可以通过 `--tls-cert` 和 `--tls-key` 客户端配置 `nsqd`，升级他们的链接为 TLS。
@@ -302,13 +301,13 @@ $ go 工具 pprof http://localhost:4151/debug/pprof/profile
 
 可以当做客户端授权的表单（`nsqd` `v0.2.28+`）。
 
-如果你想生成一个少密码，自签名证书，使用：
+如果你想生成一个 password-less，自签名证书，用：
 
-{% highlight bash %}
+```
 $ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes
-{% endhighlight %}
+```
 
-### <a name="auth">AUTH</a>
+### AUTH
 
 注意: 在 `nsqd` `v0.2.29+` 可用
 
@@ -345,37 +344,37 @@ Auth  服务器必须接受 HTTP 请求：
 
 通常情况，将会使用 TLS 来加强安全性。`nsqd` 和 授权服务器间通过信任的网络通信（并没被加密）。如果一个授权服务器通过远程 IP 信息来授权，客户端可以使用占位符（比如 `.`），作为 `AUTH` 命令（Auth 服务器忽略）。
 
-授权服务器例子 [pynsqauthd](https://github.com/jehiah/nsqauth-contrib#pynsqauthd).
+授权服务器例子 [pynsqauthd](https://github.com/jehiah/nsqauth-contrib#pynsqauthd)。
 
 帮助服务器暴露 `nsqlookupd` 和 `nsqd` `/stats` 数据给客户端，从授权服务器通过权限过滤，在以下可以找到
-[nsqauthfilter](https://github.com/jehiah/nsqauth-contrib#nsqauthfilter)
+[nsqauthfilter](https://github.com/jehiah/nsqauth-contrib#nsqauthfilter)。
 
-当使用命令行小工具，可以通过使用 `--reader-opt` 标志来授权。
+当使用命令行工具，可以通过使用 `--reader-opt` 标志来授权。
 
-{% highlight bash %}
+```
 $ nsq_tail ... -reader-opt="tls_v1,true" -reader-opt="auth_secret,$SECRET"
-{% endhighlight %}
+```
 
-### <a name="e2e">点对点处理延迟</a>
+### 点对点处理延迟
 
 你可以选择设置 `nsqd` 来收集和发射点对点信息处理延迟，通过 `--e2e-processing-latency-percentile` 标志位来配置百分比。
 
-使用概率百分比技术（参见 *[Effective Computation of Biased Quantiles over Data Streams][bquant]*）来计算值。我们通过 [bmizerany][bmizerany]  来使用 [perks][perks] 包，它能实现这个算法。
+使用概率百分比技术（参见 *[Effective Computation of Biased Quantiles over Data Streams][bquant]*）来计算值。我们通过 [bmizerany][bmizerany] 来使用 [perks][perks] 包，它能实现这个算法。
 
 我们内部维持2个通道（channel)，每个通道（channel)存储 `N/2` 分钟的延迟数据。每个 `N/2` 分钟我们重置了每个通道（channel)（并开始插入新的数据）。
 
-因为我们仅在通道（channel)级别收集数据，对于话题（topic)我们聚合并合并所有的通道（channel)数量的 quantiles。如果数据在同一个 `nsqd` 实例上时，可以使用这个技术。然而当数据已经精确的通过 `nsqd` (通过 `nsqlookupd`），我们为每个 `nsqd` 取平均值。为了维持统计的精确性，除了平均值，我们也提供最大最小值。
+因为我们仅在通道级别收集数据，对于话题我们聚合并合并所有的通道数量的 quantiles。如果数据在同一个 `nsqd` 实例上时，可以使用这个技术。然而当数据已经精确的通过 `nsqd` (通过 `nsqlookupd`），我们为每个 `nsqd` 取平均值。为了维持统计的精确性，除了平均值，我们也提供最大最小值。
 
-注意: 如果没有消费者连接，不能更新值，尽管消息队列的点对点时间会缓慢增长。这是因为仅在  `nsqd`  收到从客户端发来  `FIN` 消息时才会重新计算。当消费者重新连接，这些值将会重新调整。
+注意: 如果没有消费者连接，不能更新值，尽管消息队列的点对点时间会缓慢增长。这是因为仅在 `nsqd` 收到从客户端发来 `FIN` 消息时才会重新计算。当消费者重新连接，这些值将会重新调整。
 
 
-### <a name="statsd">Statsd / Graphite Integration</a>
+### Statsd / Graphite Integration
 
 当使用 `--statsd-address` 来为[statsd](https://github.com/etsy/statsd) （或类似 [statsdaemon](https://github.com/bitly/statsdaemon)）指定 UDP `<addr>:<port>` 时，`nsqd` 将会在 `--statsd-interval` 定期推送数据给 statsd（注意：这个间隔必须始终小于等于 graphite 的刷入间隔）。设置 `nsqadmin` 可以显示图标。
 
 推荐以下配置（但是这些选择必须建立在你的可用资源和要求上）。同时，statsd 的刷入间隔必须小于或者等于 `storage-schemas.conf` 的最小值，并且 `nsqd` 必须通过 `--statsd-interval` 来确认刷入时间小于等于时间间隔。
 
-{% highlight ini %}
+```
 # storage-schemas.conf
 [nsq]
 pattern = ^nsq\..*
@@ -386,7 +385,7 @@ retentions = 1m:1d,5m:30d,15m:1y
 pattern = ^nsq\..*
 xFilesFactor = 0.2 
 aggregationMethod = average
-{% endhighlight %}
+```
 
 `nsqd` 实例将会推送给以下 `statsd` 路径:
 
